@@ -1,0 +1,498 @@
+/* Add custom application-specific styles here */
+
+/* Example: Make required form field labels bold */
+/* label.required::after {
+    content: " *";
+    color: red;
+} */
+
+/* Consistent spacing below page titles */
+.page-title {
+    margin-bottom: 20px;
+}
+
+/* Adjustments for table action buttons */
+.table .btn-xs {
+    margin: 0 2px; /* Add small space between buttons */
+}
+
+/* --- Login Page Styles --- */
+:root {
+    --sweet-pink: #f8839a; /* Adjust color code if needed */
+    --sweet-light-gray: #f8f8f8;
+    --sweet-text-color: #555;
+    --sweet-sidebar-bg: #ffffff; /* White sidebar */
+    --sweet-sidebar-link-color: #555;
+    --sweet-sidebar-link-active-color: var(--sweet-pink);
+    --sweet-sidebar-link-active-bg: #fdf0f3; /* Light pink */
+}
+
+/* Apply directly to body for this specific page */
+body.sweet-login-page {
+    background-color: var(--sweet-light-gray) !important; /* Force background */
+    display: flex !important; /* Force flex */
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 100vh !important;
+    font-family: sans-serif !important; /* Use a preferred font */
+    padding: 0 !important; /* Reset padding */
+    margin: 0 !important; /* Reset margin */
+}
+
+.sweet-login-page .login-container {
+    background-color: #fff;
+    padding: 0;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 90%;
+    overflow: hidden; /* Ensures title background stays within rounded corners */
+    text-align: center;
+}
+
+.sweet-login-page .login-icon {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 40px;
+    color: var(--sweet-pink);
+}
+
+.sweet-login-page .login-title {
+    background-color: var(--sweet-pink);
+    color: #fff;
+    padding: 15px;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.sweet-login-page .login-form {
+    padding: 0 30px 30px 30px;
+}
+
+.sweet-login-page .login-form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.sweet-login-page .login-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--sweet-text-color);
+    font-weight: normal;
+}
+
+.sweet-login-page .login-form .form-control {
+    border-radius: 5px !important; /* Override potential conflicts */
+    border: 1px solid #ddd !important;
+    padding: 10px !important;
+    height: auto !important; /* Override Bootstrap default height if needed */
+    box-shadow: none !important; /* Remove default BS shadow */
+    font-size: 1rem !important; /* Reset font size */
+    line-height: 1.5 !important; /* Reset line height */
+    color: #495057 !important; /* Default BS input text color */
+    background-color: #fff !important; /* Ensure white background */
+}
+
+.sweet-login-page .btn-login {
+    background-color: var(--sweet-pink) !important; /* Force background */
+    color: #fff !important;
+    border: none !important;
+    padding: 12px 20px !important;
+    border-radius: 8px !important;
+    font-size: 1.1em !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    transition: background-color 0.3s ease;
+    text-align: center !important;
+    font-weight: normal !important;
+}
+
+.sweet-login-page .btn-login:hover {
+    background-color: #e07086 !important; /* Slightly darker pink on hover */
+    color: #fff !important;
+}
+
+/* Adjust alert message styling if needed */
+.sweet-login-page .login-form .alert {
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    font-size: 0.9em;
+}
+
+/* --- Bootstrap Layout Theme Styles --- */
+
+body {
+     font-family: sans-serif; /* Define default font */
+     background-color: var(--sweet-light-gray); /* Background for area outside content */
+}
+
+.sweet-main-container {
+    padding-top: 56px; /* Adjust based on fixed navbar height */
+}
+
+/* --- Top Navbar --- */
+.sweet-navbar {
+    background-color: var(--sweet-pink) !important;
+}
+
+.sweet-navbar-brand {
+    color: #fff !important;
+    font-weight: bold;
+}
+.sweet-navbar-brand i {
+    margin-right: 5px;
+}
+
+.sweet-dashboard-title-navbar {
+    color: #fff;
+    font-size: 1.2em;
+    margin-left: 15px;
+}
+
+.sweet-navbar .nav-link {
+     color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.sweet-navbar .nav-link:hover,
+.sweet-navbar .nav-link.active {
+     color: #fff !important;
+}
+
+.sweet-navbar .dropdown-menu {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.sweet-navbar .dropdown-item {
+    color: var(--sweet-text-color);
+}
+.sweet-navbar .dropdown-item i {
+    color: var(--sweet-pink);
+    margin-right: 5px;
+}
+.sweet-navbar .dropdown-item:hover {
+    background-color: var(--sweet-light-gray);
+}
+
+
+/* --- Sidebar --- */
+.sweet-sidebar {
+    background-color: var(--sweet-sidebar-bg) !important;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+    border-right: 1px solid #eee;
+    padding-top: 1rem; /* Add some padding */
+}
+
+/* Make sidebar scrollable on small screens if content overflows */
+@media (max-width: 767.98px) {
+  .sweet-sidebar {
+    position: fixed;
+    top: 56px; /* Height of navbar */
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind backdrop */
+    padding: 48px 0 0; /* Height of navbar */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+  }
+}
+
+.sweet-sidebar-title {
+    padding: 0 1rem 1rem 1rem;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 1rem;
+}
+
+.sweet-sidebar-brand {
+    color: var(--sweet-pink) !important;
+    font-weight: bold !important;
+    font-size: 1.2em;
+    text-decoration: none;
+}
+.sweet-sidebar-brand i {
+     margin-right: 5px;
+}
+
+#sidebar-menu .menu_section h6 {
+    color: #aaa;
+    text-transform: uppercase;
+    font-size: 0.75em;
+    letter-spacing: 1px;
+    padding: 0.5rem 1rem;
+}
+
+#sidebar-menu .nav-link {
+    color: var(--sweet-sidebar-link-color) !important;
+    padding: 0.75rem 1rem;
+    font-weight: normal;
+    border-left: 4px solid transparent; /* For active indicator */
+}
+
+#sidebar-menu .nav-link i.fa:first-child { /* Icon before text */
+    width: 20px; /* Align text */
+    margin-right: 8px;
+    color: #aaa;
+}
+
+#sidebar-menu .nav-link:hover {
+    color: var(--sweet-sidebar-link-active-color) !important;
+    background-color: var(--sweet-sidebar-link-active-bg);
+    border-left-color: var(--sweet-pink);
+}
+#sidebar-menu .nav-link:hover i.fa:first-child {
+    color: var(--sweet-pink);
+}
+
+#sidebar-menu .nav-item > .nav-link.active {
+    color: var(--sweet-sidebar-link-active-color) !important;
+    background-color: var(--sweet-sidebar-link-active-bg);
+    font-weight: bold;
+    border-left-color: var(--sweet-pink);
+}
+#sidebar-menu .nav-item > .nav-link.active i.fa:first-child {
+    color: var(--sweet-pink);
+}
+
+/* Basic Submenu Styling (no collapse) */
+#sidebar-menu .nav-item-header a.disabled {
+    color: #aaa !important;
+    font-weight: bold;
+    cursor: default;
+}
+#sidebar-menu .nav-item-submenu a {
+     padding-left: 2.5rem !important; /* Indent submenu items */
+     font-size: 0.9em;
+}
+
+/* --- Main Content Area --- */
+.sweet-main-content {
+    padding-top: 1.5rem; /* Add space below navbar */
+    background-color: var(--sweet-light-gray);
+}
+
+/* General Panel/Card Styling */
+.sweet-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+}
+
+.sweet-card-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--sweet-text-color);
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.sweet-card-title .view-all-link {
+    float: right;
+    font-size: 0.8em;
+    font-weight: normal;
+    color: var(--sweet-pink);
+}
+
+/* --- Specific Dashboard Widgets (Copied from previous) --- */
+
+/* Tomorrow's Orders Table */
+.table-orders thead {
+    background-color: var(--sweet-pink);
+    color: #fff;
+}
+.table-orders thead th {
+    border-bottom: none !important;
+    font-weight: normal;
+}
+.table-orders > tbody > tr > td {
+    vertical-align: middle;
+    border-color: #eee !important;
+}
+
+/* Status Badges */
+.badge {
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+.badge-pending {
+    background-color: #f0ad4e;
+    color: #fff;
+}
+.badge-ready {
+    background-color: #5cb85c;
+    color: #fff;
+}
+.badge-urgent {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+/* Recent Customers List */
+.list-recent-customers {
+    list-style: none;
+    padding-left: 0;
+}
+.list-recent-customers li {
+    padding: 5px 0;
+    border-bottom: 1px dashed #eee;
+}
+.list-recent-customers li:last-child {
+    border-bottom: none;
+}
+
+/* Monthly Sales Chart Placeholder */
+.chart-placeholder {
+    height: 200px; /* Adjust as needed */
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+}
+
+/* Style for Monthly Sales text value */
+.monthly-sales-value {
+    font-size: 2.5em; /* Larger font size */
+    font-weight: bold;
+    color: var(--sweet-pink); /* Use theme color */
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* --- Add/Edit Order Form Styles (Copied from previous) --- */
+
+.form-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.form-section:last-of-type {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.form-section-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--sweet-pink);
+    margin-bottom: 20px;
+}
+
+/* Adjust form group spacing */
+#add_order_form .form-group {
+    margin-bottom: 15px;
+}
+
+/* Style specific buttons */
+.btn-add-new {
+    background-color: var(--sweet-pink);
+    color: #fff !important; /* important to override default btn link colors */
+    border: none;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Make it fill the column */
+    line-height: 1.5; /* Align text vertically */
+    padding: 6px 12px; /* Match Bootstrap default btn padding */
+    font-size: 14px; /* Match Bootstrap default btn font size */
+    border-radius: 4px;
+}
+
+.btn-add-new:hover {
+    background-color: #e07086; /* Darker pink */
+    color: #fff !important;
+}
+
+.form-actions {
+    margin-top: 30px;
+    text-align: right;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-cancel {
+    background-color: #f0f0f0;
+    color: #666;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background-color: #e0e0e0;
+    color: #333;
+    text-decoration: none;
+}
+
+.btn-save-order {
+    background-color: #5cb85c; /* Green color from mockup */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-save-order:hover {
+    background-color: #4cae4c; /* Darker green */
+}
+
+/* Basic error styling */
+.has-error .form-control {
+    border-color: #a94442; 
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
+.has-error .help-block {
+    color: #a94442;
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+
+/* Style date/time inputs to look slightly better if possible (browser dependent) */
+#add_order_form input[type="date"],
+#add_order_form input[type="time"] {
+    /* Add custom icons or styling here if desired using background images etc. */
+    /* Basic padding adjustment */
+     padding-right: 30px; /* Make space for potential icon */
+}
+
+/* Optional: Add icons to date/time (requires setup) */
+/* Example using Font Awesome icons (would need positioning) */
+/* 
+.form-group.has-calendar-icon {
+    position: relative;
+}
+.form-group.has-calendar-icon::after {
+    font-family: 'FontAwesome';
+    content: '\f073'; 
+    position: absolute;
+    right: 25px;
+    top: 35px; 
+    color: #ccc;
+    pointer-events: none;
+}
+.form-group.has-time-icon {
+    position: relative;
+}
+.form-group.has-time-icon::after {
+    font-family: 'FontAwesome';
+    content: '\f017';
+    position: absolute;
+    right: 25px;
+    top: 35px;
+    color: #ccc;
+    pointer-events: none;
+}
+*/ 
