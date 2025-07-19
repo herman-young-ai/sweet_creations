@@ -30,8 +30,8 @@ if (!$customer) {
     exit;
 }
 
-// TODO: Fetch customer's order history here later
-$customerOrders = []; // Placeholder
+// Fetch customer's order history
+$customerOrders = getOrdersByCustomer($customerId);
 
 include '../includes/header.php';
 ?>
@@ -86,15 +86,20 @@ include '../includes/header.php';
                 <div class="col-md-6 col-sm-6">
                      <h4>Order History</h4>
                      <?php if (empty($customerOrders)): ?>
-                         <p>No orders found for this customer yet.</p>
-                         <!-- Add link to create new order for this customer? -->
+                         <div class="alert alert-info">
+                             <i class="fa fa-info-circle"></i> No orders found for this customer yet.
+                             <a href="../orders/add_order.php" class="btn btn-sm btn-primary ml-2">
+                                 <i class="fa fa-plus"></i> Create First Order
+                             </a>
+                         </div>
                      <?php else: ?>
                          <table class="table table-bordered">
                              <thead>
                                  <tr>
                                      <th>Order ID</th>
                                      <th>Order Date</th>
-                                     <th>Total Amount</th>
+                                     <th>Delivery Date</th>
+                                     <th>Total</th>
                                      <th>Status</th>
                                      <th>Actions</th>
                                  </tr>
@@ -102,19 +107,27 @@ include '../includes/header.php';
                              <tbody>
                                  <?php foreach ($customerOrders as $order): ?>
                                  <tr>
-                                     <td><?php echo $order['order_id']; // Example ?></td>
-                                     <td><?php echo date('d M Y', strtotime($order['order_date'])); // Example ?></td>
-                                     <td><?php /* echo formatCurrency($order['total_amount']); */ // Example ?></td> 
-                                     <td><?php echo htmlspecialchars($order['order_status']); // Example ?></td>
+                                     <td><?php echo $order['order_id']; ?></td>
+                                     <td><?php echo formatDate($order['order_date'], 'd M Y'); ?></td>
+                                     <td><?php echo formatDate($order['delivery_date'], 'd M Y'); ?></td>
+                                     <td><?php echo formatCurrency($order['total_amount']); ?></td> 
                                      <td>
-                                         <a href="../orders/view_order.php?id=<?php echo $order['order_id']; // Example ?>" class="btn btn-info btn-xs">View Order</a>
+                                         <span class="badge badge-<?php 
+                                             echo $order['order_status'] === 'delivered' ? 'success' : 
+                                                  ($order['order_status'] === 'in_progress' ? 'warning' : 
+                                                   ($order['order_status'] === 'ready' ? 'info' : 'secondary')); 
+                                         ?>">
+                                             <?php echo ucfirst(htmlspecialchars($order['order_status'])); ?>
+                                         </span>
+                                     </td>
+                                     <td>
+                                         <a href="../orders/view_order.php?id=<?php echo $order['order_id']; ?>" class="btn btn-info btn-xs">View</a>
                                      </td>
                                  </tr>
                                  <?php endforeach; ?>
                              </tbody>
                          </table>
                      <?php endif; ?>
-                      <p class="text-muted">(Order history functionality will be implemented later)</p>
                  </div>
 
             </div> <!-- /x_content -->

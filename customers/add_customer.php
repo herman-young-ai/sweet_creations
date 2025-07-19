@@ -96,7 +96,7 @@ include '../includes/header.php';
                     <div class="form-group row">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12 required" for="phone_number">Phone Number</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="tel" id="phone_number" name="phone_number" required="required" class="form-control" maxlength="13" pattern="^\+230\s[5-9]\d{3}\s\d{4}$" title="Enter Mauritius mobile number in format: +230 5123 4567" placeholder="+230 XXXX XXXX" value="<?php echo htmlspecialchars($customerData['phone_number']); ?>">
+                            <input type="tel" id="phone_number" name="phone_number" required="required" class="form-control" maxlength="14" pattern="^\+230\s[5-9]\d{3}\s\d{4}$" title="Enter Mauritius mobile number in format: +230 5123 4567" placeholder="+230 XXXX XXXX" value="<?php echo htmlspecialchars($customerData['phone_number']); ?>">
                              <?php if (!empty($errors['phone_number'])): ?><span class="text-danger"><?php echo $errors['phone_number']; ?></span><?php endif; ?>
                         </div>
                     </div>

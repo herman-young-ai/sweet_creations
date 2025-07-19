@@ -59,7 +59,7 @@ if (!defined('BASE_URL')) {
     <!-- Bootstrap -->
     <link href="<?php echo BASE_URL; ?>assets/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="<?php echo BASE_URL; ?>assets/gentelella/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- NProgress -->
     <link href="<?php echo BASE_URL; ?>assets/gentelella/vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- Animate.css -->
@@ -72,11 +72,24 @@ if (!defined('BASE_URL')) {
 <body class="sweet-login-page">
 
     <div class="login-container">
-        <div class="login-icon">
-            <i class="fa fa-birthday-cake"></i>
-        </div>
-        <div class="login-title">
-            Sweet Creations
+        <div class="business-logo">
+            <div class="logo-icon-container">
+                <div class="logo-main-icon">
+                    <i class="fa fa-birthday-cake"></i>
+                </div>
+                <div class="logo-accent-icons">
+                    <i class="fa fa-star logo-star-1"></i>
+                    <i class="fa fa-star logo-star-2"></i>
+                    <i class="fa fa-star logo-star-3"></i>
+                </div>
+            </div>
+            <div class="business-name">
+                <span class="business-name-main">Sweet</span>
+                <span class="business-name-accent">Creations</span>
+            </div>
+            <div class="business-tagline">
+                Premium Cake Shop & Bakery
+            </div>
         </div>
 
         <form action="login.php" method="post" class="login-form">

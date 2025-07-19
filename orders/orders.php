@@ -42,10 +42,16 @@ if (isset($_GET['status'])) {
     }
 }
 
-// TODO: Add Filtering/Search later
+// Handle Search
+$searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
+$isSearch = !empty($searchTerm);
 
-// Fetch all orders (joining with customer name by default)
-$orders = getAllOrders(); // Default order: order_date DESC
+// Fetch orders - either all or based on search
+if ($isSearch) {
+    $orders = searchOrders($searchTerm);
+} else {
+    $orders = getAllOrders(); // Default order: order_date DESC
+}
 
 // Include header
 include '../includes/header.php'; 
@@ -69,7 +75,25 @@ include '../includes/header.php';
                     </div>
                 <?php endif; ?>
 
-                <?php if (empty($orders)): ?>
+                <!-- Search Form -->
+                <div class="row">
+                    <div class="col-md-6 offset-md-6">
+                         <form action="orders.php" method="get" class="form-inline float-right">
+                            <div class="form-group mr-2 mb-2">
+                                <input type="text" name="search" class="form-control" placeholder="Search Order ID/Customer/Status/Address/Date..." title="Search across order details, customer names, order status, delivery addresses, and delivery dates (YYYY-MM-DD, DD/MM/YYYY, or DD MMM YYYY)" value="<?php echo htmlspecialchars($searchTerm); ?>">
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-search"></i> Search</button>
+                            <?php if ($isSearch): ?>
+                                <a href="orders.php" class="btn btn-secondary mb-2 ml-1">Clear Search</a>
+                            <?php endif; ?>
+                        </form>
+                    </div>
+                </div>
+                <!-- /Search Form -->
+
+                <?php if ($isSearch && empty($orders)): ?>
+                     <div class="alert alert-warning mt-3">No orders found matching your search term: "<?php echo htmlspecialchars($searchTerm); ?>". <a href="orders.php">Show all orders.</a></div>
+                <?php elseif (!$isSearch && empty($orders)): ?>
                     <div class="alert alert-info">No orders found yet. <a href="add_order.php">Create the first one!</a></div>
                 <?php else: ?>
                     <table class="table table-striped table-bordered orders-table">

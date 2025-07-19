@@ -42,10 +42,16 @@ if (isset($_GET['status'])) {
     }
 }
 
-// TODO: Add Search functionality later if needed
+// Handle Search
+$searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
+$isSearch = !empty($searchTerm);
 
-// Fetch all products
-$products = getAllProducts(); // Using default order (by cake_name ASC)
+// Fetch products - either all or based on search
+if ($isSearch) {
+    $products = searchProducts($searchTerm);
+} else {
+    $products = getAllProducts('product_id', 'ASC'); // Order by ID
+}
 
 // Include header
 include '../includes/header.php'; 
@@ -69,7 +75,25 @@ include '../includes/header.php';
                     </div>
                 <?php endif; ?>
 
-                <?php if (empty($products)): ?>
+                <!-- Search Form -->
+                <div class="row">
+                    <div class="col-md-6 offset-md-6">
+                         <form action="products.php" method="get" class="form-inline float-right">
+                            <div class="form-group mr-2 mb-2">
+                                <input type="text" name="search" class="form-control" placeholder="Search Cake Name/Category/Description..." title="Search across product names, categories, and descriptions" value="<?php echo htmlspecialchars($searchTerm); ?>">
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-search"></i> Search</button>
+                            <?php if ($isSearch): ?>
+                                <a href="products.php" class="btn btn-secondary mb-2 ml-1">Clear Search</a>
+                            <?php endif; ?>
+                        </form>
+                    </div>
+                </div>
+                <!-- /Search Form -->
+
+                <?php if ($isSearch && empty($products)): ?>
+                     <div class="alert alert-warning mt-3">No products found matching your search term: "<?php echo htmlspecialchars($searchTerm); ?>". <a href="products.php">Show all products.</a></div>
+                <?php elseif (!$isSearch && empty($products)): ?>
                     <div class="alert alert-info">No products found. <a href="add_product.php">Add the first one!</a></div>
                 <?php else: ?>
                     <table class="table table-striped table-bordered">

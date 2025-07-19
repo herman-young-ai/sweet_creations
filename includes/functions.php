@@ -67,7 +67,7 @@ function loginUser($username, $password) {
 
     try {
         // Prepare statement to find user by username
-        $stmt = $conn->prepare("SELECT user_id, username, password, role FROM USERS WHERE username = :username");
+        $stmt = $conn->prepare("SELECT user_id, username, password, full_name, role FROM USERS WHERE username = :username");
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -80,6 +80,7 @@ function loginUser($username, $password) {
             // Store user data in session
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['username'] = $user['username'];
+            $_SESSION['full_name'] = $user['full_name'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['login_time'] = time(); // Optional: store login time for inactivity timeout
 
@@ -231,9 +232,9 @@ function validateCustomerForm($data) {
     $phone = trim($data['phone_number']);
     if (empty($phone)) {
         $errors['phone_number'] = "Phone Number is required.";
-    } elseif (strlen($phone) < 13 || strlen($phone) > 13) {
-        // Mauritius format should be exactly 13 characters: +230 XXXX XXXX
-        $errors['phone_number'] = "Phone Number must be exactly 13 characters in format +230 XXXX XXXX";
+    } elseif (strlen($phone) < 14 || strlen($phone) > 14) {
+        // Mauritius format should be exactly 14 characters: +230 XXXX XXXX  
+        $errors['phone_number'] = "Phone Number must be exactly 14 characters in format +230 XXXX XXXX";
     } elseif (!preg_match('/^\+230\s\d{4}\s\d{4}$/', $phone)) {
         // Regex: Starts with +230, space, 4 digits, space, 4 digits, ends.
         $errors['phone_number'] = "Phone Number must be in the format: +230 XXXX XXXX (e.g., +230 5123 4567)";
@@ -466,6 +467,43 @@ function getAllProducts($orderBy = 'cake_name', $orderDir = 'ASC') {
 }
 
 /**
+ * Searches for products based on a search term.
+ * Searches across cake name, category, and description.
+ *
+ * @param string $searchTerm The search term to look for.
+ * @return array An array of product records matching the search, or an empty array on failure/no results.
+ */
+function searchProducts($searchTerm) {
+    $conn = connectDB();
+    if (!$conn) return [];
+
+    // Trim and prepare search term
+    $searchTerm = trim($searchTerm);
+    if (empty($searchTerm)) return [];
+    
+    // Add wildcards for LIKE search
+    $searchPattern = '%' . strtolower($searchTerm) . '%';
+
+    try {
+        $sql = "SELECT product_id, cake_name, base_price, category, custom_available, description
+                FROM PRODUCTS 
+                WHERE LOWER(cake_name) LIKE ? 
+                   OR LOWER(category) LIKE ? 
+                   OR LOWER(description) LIKE ?
+                ORDER BY product_id ASC";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$searchPattern, $searchPattern, $searchPattern]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Search products error: " . $e->getMessage());
+        return [];
+    } finally {
+        $conn = null;
+    }
+}
+
+/**
  * Validates product form data.
  *
  * @param array $data Array containing product data (e.g., from $_POST).
@@ -677,6 +715,78 @@ function getAllOrders($orderBy = 'order_date', $orderDir = 'DESC', $joinCustomer
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         error_log("Get all orders error: " . $e->getMessage());
+        return [];
+    } finally {
+        $conn = null;
+    }
+}
+
+/**
+ * Gets all orders for a specific customer.
+ *
+ * @param int $customerId The customer ID to get orders for.
+ * @return array An array of order records for the customer, or an empty array on failure/no results.
+ */
+function getOrdersByCustomer($customerId) {
+    $conn = connectDB();
+    if (!$conn) return [];
+
+    try {
+        $sql = "SELECT o.order_id, o.customer_id, o.user_id, o.order_date, o.delivery_date, 
+                       o.delivery_time, o.delivery_address, o.order_status, o.total_amount, o.is_paid
+                FROM ORDERS o 
+                WHERE o.customer_id = ?
+                ORDER BY o.order_date DESC";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$customerId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Get orders by customer error: " . $e->getMessage());
+        return [];
+    } finally {
+        $conn = null;
+    }
+}
+
+/**
+ * Searches for orders based on a search term.
+ * Searches across customer name, order ID, order status, and delivery address.
+ *
+ * @param string $searchTerm The search term to look for.
+ * @return array An array of order records matching the search, or an empty array on failure/no results.
+ */
+function searchOrders($searchTerm) {
+    $conn = connectDB();
+    if (!$conn) return [];
+
+    // Trim and prepare search term
+    $searchTerm = trim($searchTerm);
+    if (empty($searchTerm)) return [];
+    
+    // Add wildcards for LIKE search
+    $searchPattern = '%' . strtolower($searchTerm) . '%';
+
+    try {
+        $sql = "SELECT o.order_id, o.customer_id, o.user_id, o.order_date, o.delivery_date, 
+                       o.delivery_time, o.delivery_address, o.order_status, o.total_amount, 
+                       o.is_paid, c.full_name as customer_name
+                FROM ORDERS o 
+                JOIN CUSTOMERS c ON o.customer_id = c.customer_id
+                WHERE LOWER(c.full_name) LIKE ? 
+                   OR LOWER(o.order_status) LIKE ? 
+                   OR LOWER(o.delivery_address) LIKE ?
+                   OR CAST(o.order_id AS CHAR) LIKE ?
+                   OR DATE_FORMAT(o.delivery_date, '%Y-%m-%d') LIKE ?
+                   OR DATE_FORMAT(o.delivery_date, '%d/%m/%Y') LIKE ?
+                   OR DATE_FORMAT(o.delivery_date, '%d %b %Y') LIKE ?
+                ORDER BY o.order_date DESC";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$searchPattern, $searchPattern, $searchPattern, $searchPattern, $searchPattern, $searchPattern, $searchPattern]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Search orders error: " . $e->getMessage());
         return [];
     } finally {
         $conn = null;

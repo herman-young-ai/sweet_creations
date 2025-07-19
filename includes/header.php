@@ -65,7 +65,7 @@ if (!defined('BASE_URL')) {
             <ul class="navbar-nav ml-auto">
                  <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUserLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                         <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'User'; ?>
+                         <?php echo isset($_SESSION['full_name']) ? htmlspecialchars($_SESSION['full_name']) : (isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'User'); ?>
                                 </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownUserLink">
                         <a class="dropdown-item" href="<?php echo BASE_URL; ?>logout.php">
