@@ -80,24 +80,24 @@ if (!defined('BASE_URL')) {
         </div>
 
         <form action="login.php" method="post" class="login-form">
-            <?php if (!empty($errorMessage)): ?>
-                <div class="alert alert-danger" role="alert">
+                        <?php if (!empty($errorMessage)): ?>
+                            <div class="alert alert-danger" role="alert">
                     <?php echo htmlspecialchars($errorMessage); ?>
-                </div>
-            <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
 
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" class="form-control" id="username" required name="username" value="admin" />
+                <input type="text" class="form-control" id="username" required name="username" value="rashni.devi" />
             </div>
 
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" class="form-control" id="password" required name="password" value="admin123" />
-            </div>
+                        </div>
 
             <button class="btn btn-login" type="submit">Login</button>
-        </form>
+                    </form>
     </div>
 
     <!-- Optional: Add JS links if needed later -->

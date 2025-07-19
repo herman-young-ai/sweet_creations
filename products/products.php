@@ -93,8 +93,7 @@ include '../includes/header.php';
                                 <td><?php echo $product['custom_available'] ? 'Yes' : 'No'; ?></td>
                                 <td>
                                     <!-- <a href="view_product.php?id=<?php echo $product['product_id']; ?>" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View</a> -->
-                                    <a href="edit_product.php?id=<?php echo $product['product_id']; ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                    <a href="delete_product.php?id=<?php echo $product['product_id']; ?>" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete this product? This cannot be undone.');"><i class="fa fa-trash"></i> Delete</a>
+                                    <a href="edit_product.php?id=<?php echo $product['product_id']; ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit</a> <a href="delete_product.php?id=<?php echo $product['product_id']; ?>" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete this product? This cannot be undone.');"><i class="fa fa-trash"></i> Delete</a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>

@@ -88,7 +88,7 @@ include '../includes/header.php';
                     <div class="form-group row">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12 required" for="full_name">Full Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="full_name" name="full_name" required="required" class="form-control" value="<?php echo htmlspecialchars($customerData['full_name']); ?>">
+                            <input type="text" id="full_name" name="full_name" required="required" class="form-control" maxlength="100" pattern="[a-zA-Z\s\-'.]+" title="Name can only contain letters, spaces, hyphens, apostrophes, and periods" value="<?php echo htmlspecialchars($customerData['full_name']); ?>">
                             <?php if (!empty($errors['full_name'])): ?><span class="text-danger"><?php echo $errors['full_name']; ?></span><?php endif; ?>
                         </div>
                     </div>
@@ -96,7 +96,7 @@ include '../includes/header.php';
                     <div class="form-group row">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12 required" for="phone_number">Phone Number</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="phone_number" name="phone_number" required="required" class="form-control" placeholder="+230 XXXX XXXX" value="<?php echo htmlspecialchars($customerData['phone_number']); ?>">
+                            <input type="tel" id="phone_number" name="phone_number" required="required" class="form-control" maxlength="13" pattern="^\+230\s[5-9]\d{3}\s\d{4}$" title="Enter Mauritius mobile number in format: +230 5123 4567" placeholder="+230 XXXX XXXX" value="<?php echo htmlspecialchars($customerData['phone_number']); ?>">
                              <?php if (!empty($errors['phone_number'])): ?><span class="text-danger"><?php echo $errors['phone_number']; ?></span><?php endif; ?>
                         </div>
                     </div>

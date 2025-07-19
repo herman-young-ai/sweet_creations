@@ -40,22 +40,22 @@ include 'includes/header.php';
             </h2>
             <?php if (empty($upcomingOrders)): // Using upcomingOrders for demo, adjust query if needed ?>
                 <p>No orders scheduled for tomorrow.</p>
-            <?php else: ?>
+                                <?php else: ?>
                 <table class="table table-striped table-orders">
-                    <thead>
-                        <tr>
+                                        <thead>
+                                            <tr>
                             <th>Order ID</th>
-                            <th>Customer</th>
+                                                <th>Customer</th>
                             <th>Cake Type</th> 
                             <th>Delivery Time</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($upcomingOrders as $order): ?>
-                        <tr>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach($upcomingOrders as $order): ?>
+                                            <tr>
                             <td>#<?php echo $order['order_id']; ?></td>
-                            <td><?php echo htmlspecialchars($order['customer_name']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['customer_name']); ?></td>
                             <td><?php echo isset($order['items'][0]['product_name']) ? htmlspecialchars($order['items'][0]['product_name']) : 'N/A'; // Example: Get first item name ?></td> 
                             <td><?php echo !empty($order['delivery_time']) ? date("g:i A", strtotime($order['delivery_time'])) : 'Any'; ?></td>
                             <td>
@@ -68,12 +68,12 @@ include 'includes/header.php';
                                 ?>
                                 <span class="badge <?php echo $statusClass; ?>"><?php echo htmlspecialchars($order['order_status']); ?></span>
                             </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
-        </div>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                <?php endif; ?>
+                            </div>
 
         <!-- Recent Customers Card -->
         <div class="sweet-card">
@@ -100,10 +100,10 @@ include 'includes/header.php';
                     <?php endforeach; ?>
                 </ul>
              <?php endif; ?>
-        </div>
+                        </div>
 
-    </div>
-
+                </div>
+                
     <!-- Column for Monthly Sales -->
     <div class="col-md-4">
         <!-- Monthly Sales Card -->

@@ -210,18 +210,39 @@ function getAllCustomers($orderBy = 'full_name', $orderDir = 'ASC') {
 function validateCustomerForm($data) {
     $errors = [];
 
-    // Name validation (Required)
-    if (empty(trim($data['full_name']))) {
+    // Name validation (Required with enhanced validation)
+    $full_name = trim($data['full_name']);
+    if (empty($full_name)) {
         $errors['full_name'] = "Full Name is required.";
+    } elseif (strlen($full_name) < 2) {
+        $errors['full_name'] = "Full Name must be at least 2 characters long.";
+    } elseif (strlen($full_name) > 100) {
+        $errors['full_name'] = "Full Name must not exceed 100 characters.";
+    } elseif (!preg_match('/^[a-zA-Z\s\-\'\.]+$/', $full_name)) {
+        $errors['full_name'] = "Full Name can only contain letters, spaces, hyphens, apostrophes, and periods.";
+    } elseif (preg_match('/^\s+|\s+$/', $data['full_name'])) {
+        // Check for leading/trailing spaces in original data (before trim)
+        $errors['full_name'] = "Full Name cannot start or end with spaces.";
+    } elseif (preg_match('/\s{2,}/', $full_name)) {
+        $errors['full_name'] = "Full Name cannot contain multiple consecutive spaces.";
     }
 
     // Phone validation (Required, Mauritius format)
     $phone = trim($data['phone_number']);
     if (empty($phone)) {
         $errors['phone_number'] = "Phone Number is required.";
+    } elseif (strlen($phone) < 13 || strlen($phone) > 13) {
+        // Mauritius format should be exactly 13 characters: +230 XXXX XXXX
+        $errors['phone_number'] = "Phone Number must be exactly 13 characters in format +230 XXXX XXXX";
     } elseif (!preg_match('/^\+230\s\d{4}\s\d{4}$/', $phone)) {
         // Regex: Starts with +230, space, 4 digits, space, 4 digits, ends.
-        $errors['phone_number'] = "Phone Number must be in the format: +230 XXXX XXXX";
+        $errors['phone_number'] = "Phone Number must be in the format: +230 XXXX XXXX (e.g., +230 5123 4567)";
+    } elseif (preg_match('/^\s+|\s+$/', $data['phone_number'])) {
+        // Check for leading/trailing spaces in original data (before trim)
+        $errors['phone_number'] = "Phone Number cannot start or end with spaces.";
+    } elseif (!preg_match('/^\+230\s[5-9]\d{3}\s\d{4}$/', $phone)) {
+        // Validate that it starts with 5, 6, 7, 8, or 9 (valid Mauritius mobile prefixes)
+        $errors['phone_number'] = "Phone Number must start with 5, 6, 7, 8, or 9 after +230 (mobile numbers only)";
     }
 
     // Email validation (Optional, but must be valid if provided)
@@ -386,19 +407,24 @@ function searchCustomers($searchTerm) {
     $conn = connectDB();
     if (!$conn) return [];
 
-    $searchTerm = '%' . trim($searchTerm) . '%'; // Add wildcards for LIKE search
+    // Trim and prepare search term
+    $searchTerm = trim($searchTerm);
+    if (empty($searchTerm)) return [];
+    
+    // Add wildcards for LIKE search
+    $searchPattern = '%' . strtolower($searchTerm) . '%';
 
     try {
         $sql = "SELECT customer_id, full_name, phone_number, email, date_added 
                 FROM CUSTOMERS 
-                WHERE full_name LIKE :term 
-                   OR phone_number LIKE :term 
-                   OR email LIKE :term
-                ORDER BY full_name ASC"; // Default order for search results
+                WHERE LOWER(full_name) LIKE ? 
+                   OR LOWER(phone_number) LIKE ? 
+                   OR LOWER(email) LIKE ?
+                   OR LOWER(address) LIKE ?
+                ORDER BY full_name ASC";
         
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':term', $searchTerm, PDO::PARAM_STR);
-        $stmt->execute();
+        $stmt->execute([$searchPattern, $searchPattern, $searchPattern, $searchPattern]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         error_log("Search customers error: " . $e->getMessage());

@@ -14,7 +14,63 @@
 /* Adjustments for table action buttons */
 .table .btn-xs {
     margin: 0 2px; /* Add small space between buttons */
+    min-width: 60px; /* Equal minimum width for consistency */
 }
+
+/* Table column width adjustments - ONLY for customers table */
+.customers-table th:nth-child(1), /* Name column */
+.customers-table td:nth-child(1) {
+    width: 18%;
+    max-width: 150px;
+}
+
+.customers-table th:nth-child(2), /* Phone Number column */
+.customers-table td:nth-child(2) {
+    width: 15%;
+    max-width: 130px;
+}
+
+.customers-table th:nth-child(3), /* Email column */
+.customers-table td:nth-child(3) {
+    width: 20%;
+    max-width: 180px;
+    word-wrap: break-word;
+}
+
+.customers-table th:nth-child(4), /* Date Added column */
+.customers-table td:nth-child(4) {
+    width: 12%;
+    max-width: 100px;
+}
+
+.customers-table th:nth-child(5), /* Actions column */
+.customers-table td:nth-child(5) {
+    width: 25%;
+    min-width: 220px;
+}
+
+/* Orders table dynamic sizing */
+.orders-table th:nth-child(1), /* Order ID - keep small */
+.orders-table td:nth-child(1) {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.orders-table th:nth-child(7), /* Actions column - ensure enough space */
+.orders-table td:nth-child(7) {
+    min-width: 180px;
+    white-space: nowrap;
+}
+
+/* General table improvements - let content determine width */
+.table {
+    table-layout: auto;
+}
+
+.table th,
+.table td {
+    word-wrap: break-word;
+} 
 
 /* --- Login Page Styles --- */
 :root {
@@ -255,16 +311,18 @@ body {
     color: var(--sweet-pink);
 }
 
-/* Basic Submenu Styling (no collapse) */
+/* Basic Submenu Styling (REMOVED) */
+/*
 #sidebar-menu .nav-item-header a.disabled {
     color: #aaa !important;
     font-weight: bold;
     cursor: default;
 }
 #sidebar-menu .nav-item-submenu a {
-     padding-left: 2.5rem !important; /* Indent submenu items */
+     padding-left: 2.5rem !important; 
      font-size: 0.9em;
 }
+*/
 
 /* --- Main Content Area --- */
 .sweet-main-content {

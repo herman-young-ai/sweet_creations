@@ -1,64 +1,70 @@
 # Sweet Creations - Cake Shop Management System
 
-Sweet Creations is a simple web-based application designed to help a local cake shop manage customer information, product details, and orders. It provides basic CRUD (Create, Read, Update, Delete) functionality for these core areas, along with simple reporting capabilities.
+Sweet Creations is a simple web-based application designed to help a local cake shop manage customer information, product details, and orders.
 
-This project is developed as part of an IB Computer Science Internal Assessment, aiming for clarity and simplicity suitable for the specified level.
-
-## Project Status
-
-*   **Phase 0: Setup & Config - COMPLETE**
-    *   [X] Project structure initialized.
-    *   [X] Git repository set up.
-    *   [X] `.env` file created for configuration.
-    *   [X] Database connection configured.
-    *   [X] Database schema and initial data created (`database.sql`).
-    *   [X] Installation instructions drafted (`INSTALL.md`).
-*   **Phase 1: Core System & Auth - COMPLETE**
-    *   [X] Base layout/templates created (`header`, `footer`, `sidebar`).
-    *   [X] Assets integrated (Bootstrap, Gentelella).
-    *   [X] User login functionality implemented.
-    *   [X] User logout functionality implemented.
-    *   [X] Session management and page protection (`requireLogin`).
-*   **Phase 2: Modules (CRUD) - COMPLETE**
-    *   [X] Customer Management (Add, List, View, Edit, Delete, Search).
-    *   [X] Product Management (Add, List, Edit, Delete).
-    *   [X] Order Management (Add Wizard, List, View, Edit - status/delivery).
-*   **Phase 3: Dashboard & Reporting - COMPLETE (Basic)**
-    *   [X] Dashboard widgets implemented (Counts, Income).
-    *   [X] Upcoming orders list on dashboard.
-    *   [X] Reporting menu created.
-    *   [X] Daily Production report implemented (HTML view).
-    *   [X] Delivery Schedule report implemented (HTML view).
-    *   [X] Monthly Sales report implemented (HTML view).
-*   **Phase 4: Security, Refinement & Testing - IN PROGRESS**
-    *   [ ] CSRF Protection implementation.
-    *   [ ] Input sanitization/validation review.
-    *   [ ] Error handling review.
-    *   [ ] UI/UX refinements.
-    *   [X] Initial manual testing performed.
-*   **Future / Optional:**
-    *   [ ] PDF export for reports.
-    *   [ ] More detailed reporting options.
-    *   [ ] User management (Admin role).
-    *   [ ] AJAX for smoother interactions (e.g., adding order items).
+This project was developed as part of an IB Computer Science Internal Assessment.
 
 ## Technology Stack
 
 *   **PHP:** 8.0+
 *   **MySQL:** 8.0+
-*   **Web Server:** Apache (via XAMPP)
-*   **Frontend:** HTML, CSS, Basic JavaScript, Bootstrap (via Gentelella Admin Theme)
+*   **Web Server:** Apache (tested with XAMPP)
+*   **Frontend:** HTML, CSS, Basic JavaScript, Bootstrap 4
 
-## Getting Started
+## Installation
 
-Please refer to the [Installation Guide](INSTALL.md) for detailed setup instructions.
+**Requirements:**
+*   XAMPP (or equivalent Apache/MySQL/PHP stack)
+*   Modern Web Browser
+
+**Steps:**
+
+1.  **Start Server:** Ensure Apache and MySQL services are running (e.g., via XAMPP Control Panel).
+2.  **Place Files:** Clone or download the project files into a folder named `sweet_creations` inside your web server's document root (e.g., `htdocs` for XAMPP).
+3.  **Database Setup:**
+    *   Using phpMyAdmin (usually accessible at `http://localhost/phpmyadmin`) or another MySQL tool, import the `database.sql` file found in the project root. This creates the `sweet_creations` database, tables, and initial data (including users and sample data).
+    *   Verify/update database credentials (`DB_USER`, `DB_PASS`) in the `.env` file located in the project root if your MySQL setup differs from the default (user `root`, no password).
+4.  **Access:** Navigate to `http://localhost/sweet_creations/` in your browser.
 
 ## Usage
 
-Basic usage instructions will be added to [USAGE.md](USAGE.md) as features are developed.
+1.  **Login:** Access the site (`http://localhost/sweet_creations/`) and log in using one of the following credentials:
 
-## Documentation
+    **Business Owner (Administrator):**
+    *   Username: `rashni.devi`
+    *   Password: `admin123`
+    
+    **Staff Members:**
+    *   Username: `amit.sharma` | Password: `staff123`
+    *   Username: `nisha.patel` | Password: `staff123`
+    *   Username: `kevin.wong` | Password: `staff123`
+    *   Username: `anita.gopal` | Password: `staff123`
+    *   Username: `yusuf.kader` | Password: `staff123`
 
-*   [Technical Design Document](docs/1_technical_design_document.md)
-*   [Coding Requirements](docs/2_coding_requirements.md)
-*   [Implementation Checklist](docs/3_implementation_checklist.md)
+2.  **Dashboard:** Provides an overview of upcoming deliveries and counts.
+3.  **Sidebar Navigation:** Use the left sidebar to navigate between sections:
+    *   **Orders:** View existing orders, add new orders.
+    *   **Customers:** View, add, edit, or delete customer records (customers with orders cannot be deleted).
+    *   **Products:** View, add, edit, or delete product details (products used in orders cannot be deleted).
+    *   **Reports:** Generate simple reports for daily production, delivery schedule, or monthly sales.
+4.  **Operations:** Within the Orders, Customers, and Products sections, use the provided buttons ("Add New...", "View", "Edit", "Delete") to manage data.
+5.  **Logout:** Click your username in the top-right navbar and select "Log Out".
+
+## User Roles
+
+*   **Administrator (Business Owner):** Full access to all features including user management and system administration.
+*   **Staff:** Can create and manage orders, customers, and products. Can view reports and delivery schedules.
+
+## Sample Data
+
+The database includes:
+*   **15 customers** with authentic Mauritian names and contact details
+*   **15 cake products** ranging from MUR 950 to MUR 1,500
+*   **Sample orders** demonstrating the system workflow
+*   **6 users** (1 admin + 5 staff) representing a realistic cake shop team
+
+## Troubleshooting
+
+*   **Database Errors:** Check `.env` credentials and ensure MySQL is running.
+*   **404 Errors:** Verify project folder name (`sweet_creations`) and location (`htdocs`), and ensure Apache is running.
+*   **Login Issues:** Ensure you're using the correct username format (e.g., `rashni.devi`, not `Rashni Devi`).

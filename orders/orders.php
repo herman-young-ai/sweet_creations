@@ -34,6 +34,10 @@ if (isset($_GET['status'])) {
             $statusMessage = 'Invalid order ID specified.';
             $messageType = 'warning';
             break;
+        case 'delivered_order':
+            $statusMessage = 'Cannot delete order because it has been delivered.';
+            $messageType = 'warning';
+            break;
         // Add cases for added/updated if needed
     }
 }
@@ -68,7 +72,7 @@ include '../includes/header.php';
                 <?php if (empty($orders)): ?>
                     <div class="alert alert-info">No orders found yet. <a href="add_order.php">Create the first one!</a></div>
                 <?php else: ?>
-                    <table class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered orders-table">
                         <thead>
                             <tr>
                                 <th>Order ID</th>
@@ -77,7 +81,7 @@ include '../includes/header.php';
                                 <th>Delivery Date</th>
                                 <th>Total</th>
                                 <th>Status</th>
-                                <th style="width: 15%;">Actions</th>
+                                <th style="width: 20%;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,7 +94,7 @@ include '../includes/header.php';
                                 <td><?php echo formatCurrency($order['total_amount']); ?></td>
                                 <td>
                                     <span class="badge badge-<?php 
-                                        // Basic status coloring (can be improved)
+                                        // Status coloring based on combined status
                                         switch(strtolower($order['order_status'])) {
                                             case 'new': echo 'info'; break;
                                             case 'in progress': echo 'warning'; break;
@@ -104,10 +108,13 @@ include '../includes/header.php';
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="view_order.php?id=<?php echo $order['order_id']; ?>" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View</a>
-                                    <a href="edit_order.php?id=<?php echo $order['order_id']; ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                    <!-- Simple Delete might be too dangerous for orders, maybe just allow cancellation via Edit page -->
-                                    <!-- <a href="delete_order.php?id=<?php echo $order['order_id']; ?>" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure? This also deletes associated items.');"><i class="fa fa-trash"></i> Delete</a> -->
+                                    <a href="view_order.php?id=<?php echo $order['order_id']; ?>" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View</a> <a href="edit_order.php?id=<?php echo $order['order_id']; ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                                    <?php 
+                                    // Show delete button only if order is not "Delivered"
+                                    if (strtolower($order['order_status']) != 'delivered'): 
+                                    ?>
+                                        <a href="delete_order.php?id=<?php echo $order['order_id']; ?>" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete this order? This cannot be undone and will also delete all associated items.');"><i class="fa fa-trash"></i> Delete</a>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>

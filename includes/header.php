@@ -66,16 +66,16 @@ if (!defined('BASE_URL')) {
                  <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUserLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                          <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'User'; ?>
-                    </a>
+                                </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownUserLink">
                         <a class="dropdown-item" href="<?php echo BASE_URL; ?>logout.php">
                             <i class="fa fa-sign-out"></i> Log Out
                         </a>
-                    </div>
-                </li>
-            </ul>
+                                </div>
+                            </li>
+                        </ul>
         </div>
-    </nav>
+                    </nav>
 
     <div class="container-fluid sweet-main-container">
         <div class="row">
@@ -91,4 +91,4 @@ if (!defined('BASE_URL')) {
                     </div>
                  <?php endif; */ ?>
                  
-                 <!-- Content starts here -->
+                    <!-- Content starts here --> 

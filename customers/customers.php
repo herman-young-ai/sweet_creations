@@ -80,7 +80,7 @@ include '../includes/header.php'; // Adjust path: go up one directory
                     <div class="col-md-6 offset-md-6">
                          <form action="customers.php" method="get" class="form-inline float-right">
                             <div class="form-group mr-2 mb-2">
-                                <input type="text" name="search" class="form-control" placeholder="Search Name/Phone/Email..." value="<?php echo htmlspecialchars($searchTerm); ?>">
+                                <input type="text" name="search" class="form-control" placeholder="Search Name/Phone/Email/Address..." title="Search across all customer fields. Use multiple words for more specific results." value="<?php echo htmlspecialchars($searchTerm); ?>">
                             </div>
                             <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-search"></i> Search</button>
                             <?php if ($isSearch): ?>
@@ -96,7 +96,7 @@ include '../includes/header.php'; // Adjust path: go up one directory
                 <?php elseif (!$isSearch && empty($customers)): ?>
                     <div class="alert alert-info">No customers found. <a href="add_customer.php">Add the first one!</a></div>
                 <?php else: ?>
-                    <table class="table table-striped table-bordered mt-3">
+                    <table class="table table-striped table-bordered mt-3 customers-table">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -114,9 +114,7 @@ include '../includes/header.php'; // Adjust path: go up one directory
                                 <td><?php echo htmlspecialchars($customer['email']); ?></td>
                                 <td><?php echo date('d M Y', strtotime($customer['date_added'])); // Simple date format ?></td>
                                 <td>
-                                    <a href="view_customer.php?id=<?php echo $customer['customer_id']; ?>" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View</a>
-                                    <a href="edit_customer.php?id=<?php echo $customer['customer_id']; ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                    <a href="delete_customer.php?id=<?php echo $customer['customer_id']; ?>" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete this customer? This cannot be undone.');"><i class="fa fa-trash"></i> Delete</a>
+                                    <a href="view_customer.php?id=<?php echo $customer['customer_id']; ?>" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View</a> <a href="edit_customer.php?id=<?php echo $customer['customer_id']; ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Edit</a> <a href="delete_customer.php?id=<?php echo $customer['customer_id']; ?>" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete this customer? This cannot be undone.');"><i class="fa fa-trash"></i> Delete</a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
