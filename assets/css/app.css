@@ -416,12 +416,12 @@ body.sweet-login-page {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 15px;
+    padding: 15px 12px;
     border-radius: 8px;
     text-decoration: none;
     color: #fff;
     transition: all 0.2s ease;
-    min-height: 100px;
+    min-height: 70px;
     justify-content: center;
 }
 
@@ -433,8 +433,8 @@ body.sweet-login-page {
 }
 
 .quick-action-btn i {
-    font-size: 1.8rem;
-    margin-bottom: 8px;
+    font-size: 1.5rem;
+    margin-bottom: 6px;
 }
 
 .quick-action-btn span {
@@ -478,13 +478,13 @@ body.sweet-login-page {
     }
     
     .quick-action-btn {
-        padding: 15px 10px;
-        min-height: 80px;
+        padding: 12px 8px;
+        min-height: 60px;
     }
     
     .quick-action-btn i {
-        font-size: 1.4rem;
-        margin-bottom: 5px;
+        font-size: 1.2rem;
+        margin-bottom: 4px;
     }
     
     .quick-action-btn span {

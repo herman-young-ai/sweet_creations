@@ -1083,6 +1083,38 @@ function getTodaysOrders($limit = 10) {
 }
 
 /**
+ * Gets tomorrow's orders for the dashboard.
+ *
+ * @param int $limit Maximum number of orders to return.
+ * @return array Array of tomorrow's orders.
+ */
+function getTomorrowsOrders($limit = 10) {
+    $conn = connectDB();
+    if (!$conn) return [];
+
+    $tomorrow = date('Y-m-d', strtotime('+1 day'));
+
+    try {
+        $sql = "SELECT o.order_id, o.delivery_time, o.order_status, o.total_amount,
+                       c.full_name as customer_name
+                FROM ORDERS o 
+                JOIN CUSTOMERS c ON o.customer_id = c.customer_id
+                WHERE DATE(o.delivery_date) = ?
+                ORDER BY o.delivery_time ASC, o.order_id ASC
+                LIMIT ?";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$tomorrow, $limit]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Get tomorrow's orders error: " . $e->getMessage());
+        return [];
+    } finally {
+        $conn = null;
+    }
+}
+
+/**
  * Searches for orders based on a search term.
  * Searches across customer name, order ID, order status, and delivery address.
  *
