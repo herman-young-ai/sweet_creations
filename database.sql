@@ -94,7 +94,7 @@ CREATE TABLE `ORDER_ITEMS` (
 
 -- Inserting business owner (admin) and 5 staff members
 INSERT INTO `USERS` (`username`, `password`, `full_name`, `email`, `role`) VALUES
-('rashni.devi', 'admin123', 'Rashni Devi Ramchurn', 'rashni.devi@sweetcreations.com', 'Admin'),
+('rashni.devi', 'admin123', 'Rashni Devi', 'rashni.devi@sweetcreations.com', 'Admin'),
 ('amit.sharma', 'staff123', 'Amit Sharma', 'amit.sharma@sweetcreations.com', 'Staff'),
 ('nisha.patel', 'staff123', 'Nisha Patel', 'nisha.patel@sweetcreations.com', 'Staff'),
 ('kevin.wong', 'staff123', 'Kevin Wong Ah Sui', 'kevin.wong@sweetcreations.com', 'Staff'),
@@ -139,13 +139,13 @@ INSERT INTO `PRODUCTS` (`cake_name`, `base_price`, `category`, `description`, `c
 
 -- Inserting sample orders with different staff members creating them
 INSERT INTO `ORDERS` (`customer_id`, `user_id`, `delivery_date`, `delivery_address`, `order_status`, `total_amount`, `is_paid`, `special_requirements`) VALUES
-(1, 1, '2025-04-07', '12 Royal Road, Port Louis', 'New', 1200.00, 0, 'Happy Birthday Ravin!'),
-(2, 2, '2025-04-07', '45 Beach Avenue, Grand Baie', 'New', 2700.00, 0, 'Family celebration cake'),
+(1, 1, '2025-07-21', '12 Royal Road, Port Louis', 'New', 1200.00, 0, 'Happy Birthday Ravin!'),
+(2, 2, '2025-07-20', '45 Beach Avenue, Grand Baie', 'New', 2700.00, 0, 'Family celebration cake'),
 (3, 3, '2025-04-08', '78 Curepipe Road, Curepipe', 'New', 1100.00, 0, 'No nuts - customer has allergies'),
-(4, 4, '2025-04-09', '23 SSR Street, Quatre Bornes', 'In Progress', 1350.00, 0, 'Chocolate decorations requested'),
+(4, 4, '2025-07-21', '23 SSR Street, Quatre Bornes', 'In Progress', 1350.00, 0, 'Chocolate decorations requested'),
 (5, 5, '2025-04-10', '89 La Louise, Vacoas', 'In Progress', 1250.00, 0, 'Traditional design for grandmother'),
-(6, 6, '2025-04-11', '56 Independence Street, Rose Hill', 'Ready', 1450.00, 0, 'Office celebration cake'),
-(7, 2, '2025-04-12', '34 Trunk Road, Mahebourg', 'Ready', 1050.00, 0, 'Simple lemon cake for tea party'),
+(6, 6, '2025-07-20', '56 Independence Street, Rose Hill', 'Ready', 1450.00, 0, 'Office celebration cake'),
+(7, 2, '2025-07-20', '34 Trunk Road, Mahebourg', 'Ready', 1050.00, 0, 'Simple lemon cake for tea party'),
 (8, 3, '2025-03-15', '67 Camp Levieux Street, Port Louis', 'Delivered', 1300.00, 1, 'Strawberry cake for anniversary'),
 (9, 1, '2025-03-20', '12 Royal Road, Port Louis', 'Delivered', 1500.00, 1, 'Wedding anniversary celebration'),
 (10, 4, '2025-03-25', '23 SSR Street, Quatre Bornes', 'Delivered', 1000.00, 1, 'Birthday cake for child'),
