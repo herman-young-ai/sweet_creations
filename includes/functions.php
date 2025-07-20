@@ -750,6 +750,224 @@ function getOrdersByCustomer($customerId) {
 }
 
 /**
+ * Gets all users from the database.
+ *
+ * @param string $orderBy Column to order by (default: 'username').
+ * @param string $orderDir Order direction ('ASC' or 'DESC', default: 'ASC').
+ * @return array An array of user records, or an empty array on failure/no results.
+ */
+function getAllUsers($orderBy = 'username', $orderDir = 'ASC') {
+    $conn = connectDB();
+    if (!$conn) return [];
+
+    // Basic validation for order parameters
+    $validColumns = ['user_id', 'username', 'full_name', 'email', 'role', 'last_login'];
+    $orderBy = in_array($orderBy, $validColumns) ? $orderBy : 'username';
+    $orderDir = strtoupper($orderDir) === 'DESC' ? 'DESC' : 'ASC';
+
+    try {
+        $sql = "SELECT user_id, username, full_name, email, role, last_login FROM USERS ORDER BY " . $orderBy . " " . $orderDir;
+        $stmt = $conn->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Get all users error: " . $e->getMessage());
+        return [];
+    } finally {
+        $conn = null;
+    }
+}
+
+/**
+ * Gets a user by their ID.
+ *
+ * @param int $userId The user ID to retrieve.
+ * @return array|false The user record as an associative array, or false if not found.
+ */
+function getUserById($userId) {
+    $conn = connectDB();
+    if (!$conn) return false;
+
+    try {
+        $stmt = $conn->prepare("SELECT user_id, username, full_name, email, role, last_login FROM USERS WHERE user_id = ?");
+        $stmt->execute([$userId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Get user by ID error: " . $e->getMessage());
+        return false;
+    } finally {
+        $conn = null;
+    }
+}
+
+/**
+ * Adds a new user to the database.
+ *
+ * @param array $userData Associative array containing user data.
+ * @return int|false The ID of the newly inserted user on success, or false on failure.
+ */
+function addUser($userData) {
+    $conn = connectDB();
+    if (!$conn) return false;
+
+    try {
+        $sql = "INSERT INTO USERS (username, password, full_name, email, role) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->execute([
+            $userData['username'],
+            $userData['password'], // Plain text password as per current system
+            $userData['full_name'],
+            $userData['email'],
+            $userData['role']
+        ]);
+        
+        return $result ? $conn->lastInsertId() : false;
+    } catch (PDOException $e) {
+        error_log("Add user error: " . $e->getMessage());
+        return false;
+    } finally {
+        $conn = null;
+    }
+}
+
+/**
+ * Updates a user in the database.
+ *
+ * @param int $userId The user ID to update.
+ * @param array $userData Associative array containing user data.
+ * @return bool True on success, false on failure.
+ */
+function updateUser($userId, $userData) {
+    $conn = connectDB();
+    if (!$conn) return false;
+
+    try {
+        // Build dynamic update query based on provided data
+        $fields = [];
+        $values = [];
+        
+        if (isset($userData['username'])) {
+            $fields[] = 'username = ?';
+            $values[] = $userData['username'];
+        }
+        if (isset($userData['password'])) {
+            $fields[] = 'password = ?';
+            $values[] = $userData['password'];
+        }
+        if (isset($userData['full_name'])) {
+            $fields[] = 'full_name = ?';
+            $values[] = $userData['full_name'];
+        }
+        if (isset($userData['email'])) {
+            $fields[] = 'email = ?';
+            $values[] = $userData['email'];
+        }
+        if (isset($userData['role'])) {
+            $fields[] = 'role = ?';
+            $values[] = $userData['role'];
+        }
+        
+        if (empty($fields)) return false;
+        
+        $values[] = $userId; // Add user ID for WHERE clause
+        $sql = "UPDATE USERS SET " . implode(', ', $fields) . " WHERE user_id = ?";
+        
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute($values);
+    } catch (PDOException $e) {
+        error_log("Update user error: " . $e->getMessage());
+        return false;
+    } finally {
+        $conn = null;
+    }
+}
+
+/**
+ * Deletes a user from the database.
+ *
+ * @param int $userId The user ID to delete.
+ * @return bool True on success, false on failure.
+ */
+function deleteUser($userId) {
+    $conn = connectDB();
+    if (!$conn) return false;
+
+    try {
+        $stmt = $conn->prepare("DELETE FROM USERS WHERE user_id = ?");
+        return $stmt->execute([$userId]);
+    } catch (PDOException $e) {
+        error_log("Delete user error: " . $e->getMessage());
+        return false;
+    } finally {
+        $conn = null;
+    }
+}
+
+/**
+ * Validates user form data.
+ *
+ * @param array $data Array containing user data (e.g., from $_POST).
+ * @param bool $isEdit Whether this is an edit operation (password not required).
+ * @return array An array of error messages. Empty if validation passes.
+ */
+function validateUserForm($data, $isEdit = false) {
+    $errors = [];
+
+    // Username validation
+    $username = trim($data['username'] ?? '');
+    if (empty($username)) {
+        $errors['username'] = "Username is required.";
+    } elseif (strlen($username) < 3) {
+        $errors['username'] = "Username must be at least 3 characters long.";
+    } elseif (strlen($username) > 50) {
+        $errors['username'] = "Username must not exceed 50 characters.";
+    } elseif (!preg_match('/^[a-zA-Z0-9._-]+$/', $username)) {
+        $errors['username'] = "Username can only contain letters, numbers, dots, hyphens, and underscores.";
+    }
+
+    // Password validation (required for new users, optional for edits)
+    $password = trim($data['password'] ?? '');
+    if (!$isEdit && empty($password)) {
+        $errors['password'] = "Password is required.";
+    } elseif (!empty($password) && strlen($password) < 6) {
+        $errors['password'] = "Password must be at least 6 characters long.";
+    } elseif (!empty($password) && strlen($password) > 255) {
+        $errors['password'] = "Password must not exceed 255 characters.";
+    }
+
+    // Full name validation
+    $fullName = trim($data['full_name'] ?? '');
+    if (empty($fullName)) {
+        $errors['full_name'] = "Full Name is required.";
+    } elseif (strlen($fullName) < 2) {
+        $errors['full_name'] = "Full Name must be at least 2 characters long.";
+    } elseif (strlen($fullName) > 100) {
+        $errors['full_name'] = "Full Name must not exceed 100 characters.";
+    } elseif (!preg_match('/^[a-zA-Z\s\-\'.]+$/', $fullName)) {
+        $errors['full_name'] = "Full Name can only contain letters, spaces, hyphens, apostrophes, and periods.";
+    }
+
+    // Email validation (optional)
+    $email = trim($data['email'] ?? '');
+    if (!empty($email)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = "Please enter a valid email address.";
+        } elseif (strlen($email) > 100) {
+            $errors['email'] = "Email must not exceed 100 characters.";
+        }
+    }
+
+    // Role validation
+    $role = trim($data['role'] ?? '');
+    if (empty($role)) {
+        $errors['role'] = "Role is required.";
+    } elseif (!in_array($role, ['Admin', 'Staff'])) {
+        $errors['role'] = "Role must be either 'Admin' or 'Staff'.";
+    }
+
+    return $errors;
+}
+
+/**
  * Searches for orders based on a search term.
  * Searches across customer name, order ID, order status, and delivery address.
  *

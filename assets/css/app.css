@@ -247,6 +247,50 @@ body.sweet-login-page {
     font-size: 0.9em;
 }
 
+/* Admin Users Table Styles */
+.users-table th:nth-child(1), /* User ID column */
+.users-table td:nth-child(1) {
+    width: 8%;
+    max-width: 80px;
+}
+
+.users-table th:nth-child(2), /* Username column */
+.users-table td:nth-child(2) {
+    width: 15%;
+    max-width: 120px;
+}
+
+.users-table th:nth-child(3), /* Full Name column */
+.users-table td:nth-child(3) {
+    width: 20%;
+    max-width: 150px;
+}
+
+.users-table th:nth-child(4), /* Email column */
+.users-table td:nth-child(4) {
+    width: 20%;
+    max-width: 180px;
+    word-wrap: break-word;
+}
+
+.users-table th:nth-child(5), /* Role column */
+.users-table td:nth-child(5) {
+    width: 10%;
+    max-width: 80px;
+}
+
+.users-table th:nth-child(6), /* Last Login column */
+.users-table td:nth-child(6) {
+    width: 12%;
+    max-width: 120px;
+}
+
+.users-table th:nth-child(7), /* Actions column */
+.users-table td:nth-child(7) {
+    width: 25%;
+    min-width: 200px;
+}
+
 /* --- Bootstrap Layout Theme Styles --- */
 
 body {

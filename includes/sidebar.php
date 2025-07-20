@@ -39,6 +39,19 @@
                     </li>
                 </ul>
             </div>
+            
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Admin'): ?>
+            <div class="menu_section">
+                <h6>Administration</h6>
+                <ul class="side-menu nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_users.php">
+                            <i class="fa fa-user-circle"></i> Manage Staff
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <?php endif; ?>
         </div>
         <!-- /sidebar menu -->
 
