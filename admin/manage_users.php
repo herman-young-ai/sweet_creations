@@ -54,8 +54,8 @@ if (isset($_GET['status'])) {
     }
 }
 
-// Get all staff accounts (exclude the current admin from deletion)
-$users = getAllUsers();
+// Get all staff accounts sorted by ID (exclude the current admin from deletion)
+$users = getAllUsers('user_id', 'ASC');
 
 include '../includes/header.php';
 ?>
