@@ -1587,4 +1587,105 @@ function getMonthlySalesSummary($yearMonth) {
     }
 }
 
+/**
+ * Gets detailed monthly sales analytics for reporting.
+ *
+ * @param string $yearMonth Year-month in YYYY-MM format.
+ * @return array Detailed analytics data.
+ */
+function getDetailedMonthlySalesAnalytics($yearMonth) {
+    $conn = connectDB();
+    if (!$conn) return [];
+
+    try {
+        $analytics = [];
+        
+        // Basic summary stats
+        $sql = "SELECT 
+                    COUNT(*) as total_orders,
+                    SUM(total_amount) as total_revenue,
+                    AVG(total_amount) as avg_order_value,
+                    MIN(total_amount) as min_order_value,
+                    MAX(total_amount) as max_order_value,
+                    COUNT(DISTINCT customer_id) as unique_customers
+                FROM ORDERS 
+                WHERE DATE_FORMAT(order_date, '%Y-%m') = ? 
+                AND order_status != 'Cancelled'";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$yearMonth]);
+        $analytics['summary'] = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Order status breakdown
+        $sql = "SELECT 
+                    order_status,
+                    COUNT(*) as count,
+                    SUM(total_amount) as revenue
+                FROM ORDERS 
+                WHERE DATE_FORMAT(order_date, '%Y-%m') = ?
+                GROUP BY order_status
+                ORDER BY count DESC";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$yearMonth]);
+        $analytics['status_breakdown'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Top customers
+        $sql = "SELECT 
+                    c.full_name,
+                    COUNT(o.order_id) as order_count,
+                    SUM(o.total_amount) as total_spent
+                FROM ORDERS o
+                JOIN CUSTOMERS c ON o.customer_id = c.customer_id
+                WHERE DATE_FORMAT(o.order_date, '%Y-%m') = ?
+                AND o.order_status != 'Cancelled'
+                GROUP BY o.customer_id, c.full_name
+                ORDER BY total_spent DESC
+                LIMIT 5";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$yearMonth]);
+        $analytics['top_customers'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Daily sales trend
+        $sql = "SELECT 
+                    DATE(order_date) as order_date,
+                    COUNT(*) as orders,
+                    SUM(total_amount) as revenue
+                FROM ORDERS 
+                WHERE DATE_FORMAT(order_date, '%Y-%m') = ?
+                AND order_status != 'Cancelled'
+                GROUP BY DATE(order_date)
+                ORDER BY order_date ASC";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$yearMonth]);
+        $analytics['daily_trend'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Product performance (if you have order items table)
+        // For now, we'll skip this as the current schema might not have detailed product breakdown
+        
+        // Compare with previous month
+        $prevMonth = date('Y-m', strtotime($yearMonth . '-01 -1 month'));
+        $sql = "SELECT 
+                    COUNT(*) as prev_orders,
+                    SUM(total_amount) as prev_revenue
+                FROM ORDERS 
+                WHERE DATE_FORMAT(order_date, '%Y-%m') = ?
+                AND order_status != 'Cancelled'";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$prevMonth]);
+        $analytics['previous_month'] = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $analytics;
+        
+    } catch (PDOException $e) {
+        error_log("Get detailed monthly analytics error: " . $e->getMessage());
+        return [];
+    } finally {
+        $conn = null;
+    }
+}
+
 ?> 
