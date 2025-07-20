@@ -18,15 +18,157 @@ $pageTitle = 'Dashboard';
 $today = date('Y-m-d');
 $tomorrow = date('Y-m-d', strtotime('+1 day'));
 
-$todaysOrdersCount = getOrderCountForDate($today);
-$tomorrowsOrdersCount = getOrderCountForDate($tomorrow); // For the widget tile
-$totalCustomers = getTotalCustomerCount();
+// Get today's statistics
+$todaysStats = getTodaysStats();
+$dashboardStats = getDashboardStats();
+$todaysOrders = getTodaysOrders(5);
+
+// Legacy data for existing sections
+$todaysOrdersCount = $todaysStats['orders_count'];
+$tomorrowsOrdersCount = getOrderCountForDate($tomorrow);
+$totalCustomers = $dashboardStats['total_customers'] ?? getTotalCustomerCount();
 $monthlyIncome = getCurrentMonthIncome();
-$upcomingOrders = getUpcomingOrders(5); // Get next 5 upcoming orders
+$upcomingOrders = getUpcomingOrders(5);
 
 // Include header
 include 'includes/header.php';
 ?>
+
+<!-- Today's Summary Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="summary-card summary-card-orders">
+            <div class="summary-card-content">
+                <div class="summary-card-number"><?php echo $todaysStats['orders_count']; ?></div>
+                <div class="summary-card-label">Today's Orders</div>
+                <div class="summary-card-sublabel">For delivery today</div>
+            </div>
+            <div class="summary-card-icon">
+                <i class="fa fa-shopping-cart"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="summary-card summary-card-revenue">
+            <div class="summary-card-content">
+                <div class="summary-card-number"><?php echo formatCurrency($todaysStats['revenue']); ?></div>
+                <div class="summary-card-label">Today's Revenue</div>
+                <div class="summary-card-sublabel">From today's orders</div>
+            </div>
+            <div class="summary-card-icon">
+                <i class="fa fa-money"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="summary-card summary-card-pending">
+            <div class="summary-card-content">
+                <div class="summary-card-number"><?php echo $todaysStats['pending_count']; ?></div>
+                <div class="summary-card-label">Pending Orders</div>
+                <div class="summary-card-sublabel">Need preparation</div>
+            </div>
+            <div class="summary-card-icon">
+                <i class="fa fa-clock-o"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="summary-card summary-card-ready">
+            <div class="summary-card-content">
+                <div class="summary-card-number"><?php echo $todaysStats['ready_count']; ?></div>
+                <div class="summary-card-label">Ready Orders</div>
+                <div class="summary-card-sublabel">Ready for pickup</div>
+            </div>
+            <div class="summary-card-icon">
+                <i class="fa fa-check-circle"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions Panel -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="quick-actions-panel">
+            <h3 class="quick-actions-title">Quick Actions</h3>
+            <div class="quick-actions-grid">
+                <a href="<?php echo BASE_URL; ?>orders/add_order.php" class="quick-action-btn quick-action-primary">
+                    <i class="fa fa-plus-circle"></i>
+                    <span>New Order</span>
+                </a>
+                <a href="<?php echo BASE_URL; ?>customers/add_customer.php" class="quick-action-btn quick-action-success">
+                    <i class="fa fa-user-plus"></i>
+                    <span>Add Customer</span>
+                </a>
+                <a href="<?php echo BASE_URL; ?>orders/orders.php" class="quick-action-btn quick-action-info">
+                    <i class="fa fa-search"></i>
+                    <span>View Orders</span>
+                </a>
+                <a href="<?php echo BASE_URL; ?>products/products.php" class="quick-action-btn quick-action-warning">
+                    <i class="fa fa-birthday-cake"></i>
+                    <span>Manage Products</span>
+                </a>
+                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Admin'): ?>
+                <a href="<?php echo BASE_URL; ?>admin/manage_users.php" class="quick-action-btn quick-action-danger">
+                    <i class="fa fa-users"></i>
+                    <span>Manage Staff</span>
+                </a>
+                <?php endif; ?>
+                <a href="<?php echo BASE_URL; ?>reports/reports.php" class="quick-action-btn quick-action-secondary">
+                    <i class="fa fa-bar-chart"></i>
+                    <span>Reports</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Today's Orders Section -->
+<?php if (!empty($todaysOrders)): ?>
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="sweet-card">
+            <h2 class="sweet-card-title">
+                Today's Orders Schedule
+                <a href="<?php echo BASE_URL; ?>orders/orders.php" class="view-all-link">View All</a>
+            </h2>
+            <table class="table table-striped table-orders">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Delivery Time</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($todaysOrders as $order): ?>
+                    <tr>
+                        <td>#<?php echo $order['order_id']; ?></td>
+                        <td><?php echo htmlspecialchars($order['customer_name']); ?></td>
+                        <td><?php echo !empty($order['delivery_time']) ? date("g:i A", strtotime($order['delivery_time'])) : 'Any time'; ?></td>
+                        <td><?php echo formatCurrency($order['total_amount']); ?></td>
+                        <td>
+                            <?php 
+                            $statusClass = 'badge-secondary';
+                            switch(strtolower($order['order_status'])) {
+                                case 'new': $statusClass = 'badge-primary'; break;
+                                case 'in_progress': $statusClass = 'badge-warning'; break;
+                                case 'ready': $statusClass = 'badge-success'; break;
+                                case 'delivered': $statusClass = 'badge-info'; break;
+                            }
+                            ?>
+                            <span class="badge <?php echo $statusClass; ?>"><?php echo ucfirst(htmlspecialchars($order['order_status'])); ?></span>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
 
 <div class="row">
     <!-- Column for Orders and Customers -->

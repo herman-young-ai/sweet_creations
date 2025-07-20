@@ -968,6 +968,121 @@ function validateUserForm($data, $isEdit = false) {
 }
 
 /**
+ * Gets today's order statistics for dashboard.
+ *
+ * @return array Array containing today's order counts and revenue.
+ */
+function getTodaysStats() {
+    $conn = connectDB();
+    if (!$conn) return ['orders_count' => 0, 'revenue' => 0, 'pending_count' => 0, 'ready_count' => 0];
+
+    $today = date('Y-m-d');
+
+    try {
+        // Get today's order counts and revenue
+        $sql = "SELECT 
+                    COUNT(*) as total_orders,
+                    COALESCE(SUM(total_amount), 0) as total_revenue,
+                    SUM(CASE WHEN order_status = 'new' THEN 1 ELSE 0 END) as pending_orders,
+                    SUM(CASE WHEN order_status = 'ready' THEN 1 ELSE 0 END) as ready_orders,
+                    SUM(CASE WHEN order_status = 'delivered' THEN 1 ELSE 0 END) as delivered_orders
+                FROM ORDERS 
+                WHERE DATE(delivery_date) = ?";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$today]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return [
+            'orders_count' => (int)$result['total_orders'],
+            'revenue' => (float)$result['total_revenue'],
+            'pending_count' => (int)$result['pending_orders'],
+            'ready_count' => (int)$result['ready_orders'],
+            'delivered_count' => (int)$result['delivered_orders']
+        ];
+    } catch (PDOException $e) {
+        error_log("Get today's stats error: " . $e->getMessage());
+        return ['orders_count' => 0, 'revenue' => 0, 'pending_count' => 0, 'ready_count' => 0, 'delivered_count' => 0];
+    } finally {
+        $conn = null;
+    }
+}
+
+/**
+ * Gets quick dashboard statistics.
+ *
+ * @return array Array containing various dashboard stats.
+ */
+function getDashboardStats() {
+    $conn = connectDB();
+    if (!$conn) return [];
+
+    try {
+        $stats = [];
+        
+        // Total customers
+        $stmt = $conn->query("SELECT COUNT(*) as count FROM CUSTOMERS");
+        $stats['total_customers'] = (int)$stmt->fetch(PDO::FETCH_ASSOC)['count'];
+        
+        // Total products
+        $stmt = $conn->query("SELECT COUNT(*) as count FROM PRODUCTS");
+        $stats['total_products'] = (int)$stmt->fetch(PDO::FETCH_ASSOC)['count'];
+        
+        // Orders this week
+        $weekStart = date('Y-m-d', strtotime('monday this week'));
+        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM ORDERS WHERE DATE(order_date) >= ?");
+        $stmt->execute([$weekStart]);
+        $stats['orders_this_week'] = (int)$stmt->fetch(PDO::FETCH_ASSOC)['count'];
+        
+        // Average order value (last 30 days)
+        $thirtyDaysAgo = date('Y-m-d', strtotime('-30 days'));
+        $stmt = $conn->prepare("SELECT AVG(total_amount) as avg_value FROM ORDERS WHERE DATE(order_date) >= ?");
+        $stmt->execute([$thirtyDaysAgo]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stats['avg_order_value'] = (float)($result['avg_value'] ?: 0);
+        
+        return $stats;
+    } catch (PDOException $e) {
+        error_log("Get dashboard stats error: " . $e->getMessage());
+        return [];
+    } finally {
+        $conn = null;
+    }
+}
+
+/**
+ * Gets today's orders for the dashboard.
+ *
+ * @param int $limit Maximum number of orders to return.
+ * @return array Array of today's orders.
+ */
+function getTodaysOrders($limit = 10) {
+    $conn = connectDB();
+    if (!$conn) return [];
+
+    $today = date('Y-m-d');
+
+    try {
+        $sql = "SELECT o.order_id, o.delivery_time, o.order_status, o.total_amount,
+                       c.full_name as customer_name
+                FROM ORDERS o 
+                JOIN CUSTOMERS c ON o.customer_id = c.customer_id
+                WHERE DATE(o.delivery_date) = ?
+                ORDER BY o.delivery_time ASC, o.order_id ASC
+                LIMIT ?";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$today, $limit]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Get today's orders error: " . $e->getMessage());
+        return [];
+    } finally {
+        $conn = null;
+    }
+}
+
+/**
  * Searches for orders based on a search term.
  * Searches across customer name, order ID, order status, and delivery address.
  *

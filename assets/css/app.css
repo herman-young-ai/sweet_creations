@@ -330,6 +330,174 @@ body.sweet-login-page {
     background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 
+/* Dashboard Summary Cards */
+.summary-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-left: 4px solid #ddd;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.summary-card-orders { border-left-color: #007bff; }
+.summary-card-revenue { border-left-color: #28a745; }
+.summary-card-pending { border-left-color: #ffc107; }
+.summary-card-ready { border-left-color: #17a2b8; }
+
+.summary-card-content {
+    flex: 1;
+}
+
+.summary-card-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.summary-card-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 2px;
+}
+
+.summary-card-sublabel {
+    font-size: 0.75rem;
+    color: #999;
+}
+
+.summary-card-icon {
+    font-size: 2.5rem;
+    opacity: 0.3;
+    margin-left: 15px;
+}
+
+.summary-card-orders .summary-card-icon { color: #007bff; }
+.summary-card-revenue .summary-card-icon { color: #28a745; }
+.summary-card-pending .summary-card-icon { color: #ffc107; }
+.summary-card-ready .summary-card-icon { color: #17a2b8; }
+
+/* Quick Actions Panel */
+.quick-actions-panel {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.quick-actions-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.quick-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.2s ease;
+    min-height: 100px;
+    justify-content: center;
+}
+
+.quick-action-btn:hover {
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.quick-action-btn i {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+}
+
+.quick-action-btn span {
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.quick-action-primary { background-color: #007bff; }
+.quick-action-success { background-color: #28a745; }
+.quick-action-info { background-color: #17a2b8; }
+.quick-action-warning { background-color: #ffc107; color: #333 !important; }
+.quick-action-danger { background-color: #dc3545; }
+.quick-action-secondary { background-color: #6c757d; }
+
+.quick-action-primary:hover { background-color: #0056b3; }
+.quick-action-success:hover { background-color: #1e7e34; }
+.quick-action-info:hover { background-color: #117a8b; }
+.quick-action-warning:hover { background-color: #d39e00; }
+.quick-action-danger:hover { background-color: #bd2130; }
+.quick-action-secondary:hover { background-color: #545b62; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .summary-card {
+        margin-bottom: 15px;
+    }
+    
+    .summary-card-number {
+        font-size: 1.5rem;
+    }
+    
+    .summary-card-icon {
+        font-size: 2rem;
+        margin-left: 10px;
+    }
+    
+    .quick-actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .quick-action-btn {
+        padding: 15px 10px;
+        min-height: 80px;
+    }
+    
+    .quick-action-btn i {
+        font-size: 1.4rem;
+        margin-bottom: 5px;
+    }
+    
+    .quick-action-btn span {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* --- Bootstrap Layout Theme Styles --- */
 
 body {
