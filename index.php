@@ -129,7 +129,7 @@ include 'includes/header.php';
         <div class="sweet-card">
             <h2 class="sweet-card-title">
                 Today's Orders Schedule
-                <a href="<?php echo BASE_URL; ?>orders/orders.php?filter=today" class="view-all-link">View All</a>
+                <a href="<?php echo BASE_URL; ?>orders/orders.php?search=<?php echo urlencode(date('d M')); ?>" class="view-all-link">View All</a>
             </h2>
             <?php if (!empty($todaysOrders)): ?>
             <table class="table table-striped table-orders">
@@ -178,7 +178,7 @@ include 'includes/header.php';
         <div class="sweet-card">
             <h2 class="sweet-card-title">
                 Tomorrow's Orders Schedule
-                <a href="<?php echo BASE_URL; ?>orders/orders.php?filter=tomorrow" class="view-all-link">View All</a>
+                <a href="<?php echo BASE_URL; ?>orders/orders.php?search=<?php echo urlencode(date('d M', strtotime('+1 day'))); ?>" class="view-all-link">View All</a>
             </h2>
             <?php if (!empty($tomorrowsOrders)): ?>
             <table class="table table-striped table-orders">
