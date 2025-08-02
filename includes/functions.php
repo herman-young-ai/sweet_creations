@@ -72,8 +72,8 @@ function loginUser($username, $password) {
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Check if user exists and password is correct (plain text comparison)
-        if ($user && $password === $user['password']) {
+        // Check if user exists and password is correct (bcrypt verification)
+        if ($user && password_verify($password, $user['password'])) {
             // Regenerate session ID to prevent session fixation
             session_regenerate_id(true);
 
@@ -487,13 +487,14 @@ function searchProducts($searchTerm) {
     try {
         $sql = "SELECT product_id, cake_name, base_price, category, custom_available, description
                 FROM PRODUCTS 
-                WHERE LOWER(cake_name) LIKE ? 
+                WHERE CAST(product_id AS CHAR) LIKE ? 
+                   OR LOWER(cake_name) LIKE ? 
                    OR LOWER(category) LIKE ? 
                    OR LOWER(description) LIKE ?
                 ORDER BY product_id ASC";
         
         $stmt = $conn->prepare($sql);
-        $stmt->execute([$searchPattern, $searchPattern, $searchPattern]);
+        $stmt->execute([$searchPattern, $searchPattern, $searchPattern, $searchPattern]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         error_log("Search products error: " . $e->getMessage());
@@ -814,7 +815,7 @@ function addUser($userData) {
         $stmt = $conn->prepare($sql);
         $result = $stmt->execute([
             $userData['username'],
-            $userData['password'], // Plain text password as per current system
+            password_hash($userData['password'], PASSWORD_DEFAULT), // Hash password with bcrypt
             $userData['full_name'],
             $userData['email'],
             $userData['role']
@@ -851,7 +852,7 @@ function updateUser($userId, $userData) {
         }
         if (isset($userData['password'])) {
             $fields[] = 'password = ?';
-            $values[] = $userData['password'];
+            $values[] = password_hash($userData['password'], PASSWORD_DEFAULT);
         }
         if (isset($userData['full_name'])) {
             $fields[] = 'full_name = ?';

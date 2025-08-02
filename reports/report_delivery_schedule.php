@@ -48,6 +48,9 @@ include '../includes/header.php';
                 <h2>Delivery Schedule</h2>
                  <ul class="nav navbar-right panel_toolbox">
                     <li><a href="reports.php" class="btn btn-secondary btn-sm"><i class="fa fa-arrow-left"></i> Back to Reports</a></li>
+                    <?php if (isset($_GET['start_date']) && !$errorMessage && !empty($orders)): ?>
+                    <li><button onclick="printDeliverySchedule()" class="btn btn-info btn-sm"><i class="fa fa-print"></i> Print Report</button></li>
+                    <?php endif; ?>
                  </ul>
                 <div class="clearfix"></div>
             </div>
@@ -114,6 +117,78 @@ include '../includes/header.php';
         </div> <!-- /x_panel -->
     </div> <!-- /col-md-12 -->
 </div> <!-- /row -->
+
+<?php if (isset($_GET['start_date']) && !$errorMessage && !empty($orders)): ?>
+<script>
+function printDeliverySchedule() {
+    // Create a new window for printing
+    var printWindow = window.open('', '_blank');
+    
+    // Build the print content
+    var printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Delivery Schedule - <?php echo formatDate($startDate) . ' to ' . formatDate($endDate); ?></title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f8f9fa; font-weight: bold; }
+                tr:nth-child(even) { background-color: #f9f9f9; }
+                @media print { 
+                    body { margin: 0; font-size: 12px; } 
+                    .no-print { display: none; }
+                    table { font-size: 11px; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>Sweet Creations - Delivery Schedule</h1>
+                <h2><?php echo formatDate($startDate) . ' to ' . formatDate($endDate); ?></h2>
+                <p>Generated on: <?php echo date('F j, Y g:i A'); ?></p>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Delivery Date</th>
+                        <th>Time</th>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($orders as $order): ?>
+                    <tr>
+                        <td><?php echo formatDate($order['delivery_date']); ?></td>
+                        <td><?php echo !empty($order['delivery_time']) ? date("g:i A", strtotime($order['delivery_time'])) : 'Any'; ?></td>
+                        <td>#<?php echo $order['order_id']; ?></td>
+                        <td><?php echo htmlspecialchars($order['customer_name']); ?></td>
+                        <td><?php echo htmlspecialchars(getCustomerById($order['customer_id'])['phone_number']); ?></td>
+                        <td><?php echo htmlspecialchars($order['delivery_address']); ?></td>
+                        <td><?php echo htmlspecialchars($order['order_status']); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            
+        </body>
+        </html>
+    `;
+    
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+}
+</script>
+<?php endif; ?>
 
 <?php 
 // Include footer

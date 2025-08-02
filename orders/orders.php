@@ -80,7 +80,7 @@ include '../includes/header.php';
                     <div class="col-md-6 offset-md-6">
                          <form action="orders.php" method="get" class="form-inline float-right">
                             <div class="form-group mr-2 mb-2">
-                                <input type="text" name="search" class="form-control" placeholder="Search Order ID/Customer/Status/Address/Date..." title="Search across order details, customer names, order status, delivery addresses, and delivery dates (YYYY-MM-DD, DD/MM/YYYY, or DD MMM YYYY)" value="<?php echo htmlspecialchars($searchTerm); ?>">
+                                <input type="text" name="search" class="form-control" placeholder="ID, Customer, Status, DeliveryDate" title="Search across order details, customer names, order status, delivery addresses, and delivery dates (YYYY-MM-DD, DD/MM/YYYY, or DD MMM YYYY)" value="<?php echo htmlspecialchars($searchTerm); ?>">
                             </div>
                             <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-search"></i> Search</button>
                             <?php if ($isSearch): ?>

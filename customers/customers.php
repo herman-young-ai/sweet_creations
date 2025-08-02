@@ -80,7 +80,7 @@ include '../includes/header.php'; // Adjust path: go up one directory
                     <div class="col-md-6 offset-md-6">
                          <form action="customers.php" method="get" class="form-inline float-right">
                             <div class="form-group mr-2 mb-2">
-                                <input type="text" name="search" class="form-control" placeholder="Search Name/Phone/Email/Address..." title="Search across all customer fields. Use multiple words for more specific results." value="<?php echo htmlspecialchars($searchTerm); ?>">
+                                <input type="text" name="search" class="form-control" placeholder="Name, Phone, Email" title="Search across all customer fields. Use multiple words for more specific results." value="<?php echo htmlspecialchars($searchTerm); ?>">
                             </div>
                             <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-search"></i> Search</button>
                             <?php if ($isSearch): ?>

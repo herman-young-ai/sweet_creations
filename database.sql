@@ -92,14 +92,15 @@ CREATE TABLE `ORDER_ITEMS` (
 -- Initial Data
 -- --------------------------------------------------------
 
--- Inserting business owner (admin) and 5 staff members
+-- Inserting business owner (admin) and 5 staff members (passwords are bcrypt hashed)
+-- Default passwords: admin123 for admin, staff123 for staff
 INSERT INTO `USERS` (`username`, `password`, `full_name`, `email`, `role`) VALUES
-('rashni.devi', 'admin123', 'Rashni Devi', 'rashni.devi@sweetcreations.com', 'Admin'),
-('amit.sharma', 'staff123', 'Amit Sharma', 'amit.sharma@sweetcreations.com', 'Staff'),
-('nisha.patel', 'staff123', 'Nisha Patel', 'nisha.patel@sweetcreations.com', 'Staff'),
-('kevin.wong', 'staff123', 'Kevin Wong Ah Sui', 'kevin.wong@sweetcreations.com', 'Staff'),
-('anita.gopal', 'staff123', 'Anita Gopal', 'anita.gopal@sweetcreations.com', 'Staff'),
-('yusuf.kader', 'staff123', 'Yusuf Kader', 'yusuf.kader@sweetcreations.com', 'Staff');
+('rashni.devi', '$2y$10$83if0SKG4DcCfxET4EqVduM6Ua7L3hSl0UQW9F6tEFHQ7LKYWIDYS', 'Rashni Devi', 'rashni.devi@sweetcreations.com', 'Admin'),
+('amit.sharma', '$2y$10$/34br7Hynlnt9ZyFBn/m.ettI7H1BVeAdhpQK6GhMRim8pbFk2bC6', 'Amit Sharma', 'amit.sharma@sweetcreations.com', 'Staff'),
+('nisha.patel', '$2y$10$/34br7Hynlnt9ZyFBn/m.ettI7H1BVeAdhpQK6GhMRim8pbFk2bC6', 'Nisha Patel', 'nisha.patel@sweetcreations.com', 'Staff'),
+('kevin.wong', '$2y$10$/34br7Hynlnt9ZyFBn/m.ettI7H1BVeAdhpQK6GhMRim8pbFk2bC6', 'Kevin Wong Ah Sui', 'kevin.wong@sweetcreations.com', 'Staff'),
+('anita.gopal', '$2y$10$/34br7Hynlnt9ZyFBn/m.ettI7H1BVeAdhpQK6GhMRim8pbFk2bC6', 'Anita Gopal', 'anita.gopal@sweetcreations.com', 'Staff'),
+('yusuf.kader', '$2y$10$/34br7Hynlnt9ZyFBn/m.ettI7H1BVeAdhpQK6GhMRim8pbFk2bC6', 'Yusuf Kader', 'yusuf.kader@sweetcreations.com', 'Staff');
 
 -- Inserting 15 customers with authentic Mauritian names
 INSERT INTO `CUSTOMERS` (`full_name`, `phone_number`, `email`, `address`, `notes`) VALUES

@@ -498,6 +498,96 @@ body.sweet-login-page {
     }
 }
 
+/* Products page table - Dynamic column widths */
+.products-page .table {
+    table-layout: auto;
+    width: 100%;
+}
+
+.products-page .table th,
+.products-page .table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 8px 12px;
+}
+
+/* Specific column width adjustments for products table */
+.products-page .table th:nth-child(1), /* ID */
+.products-page .table td:nth-child(1) {
+    width: 5%;
+    min-width: 40px;
+}
+
+.products-page .table th:nth-child(2), /* Cake Name */
+.products-page .table td:nth-child(2) {
+    width: 25%;
+    min-width: 150px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.products-page .table th:nth-child(3), /* Category */
+.products-page .table td:nth-child(3) {
+    width: 15%;
+    min-width: 100px;
+}
+
+.products-page .table th:nth-child(4), /* Base Price */
+.products-page .table td:nth-child(4) {
+    width: 12%;
+    min-width: 90px;
+    text-align: right;
+}
+
+.products-page .table th:nth-child(5), /* Customizable */
+.products-page .table td:nth-child(5) {
+    width: 10%;
+    min-width: 80px;
+    text-align: center;
+}
+
+.products-page .table th:nth-child(6), /* Actions */
+.products-page .table td:nth-child(6) {
+    width: 35%;
+    min-width: 180px;
+    white-space: nowrap;
+}
+
+/* Search input width adjustments for listing pages */
+.x_content .form-inline input[name="search"] {
+    min-width: 400px;
+    width: 400px;
+}
+
+/* Make search responsive */
+@media (max-width: 768px) {
+    .x_content .form-inline input[name="search"] {
+        min-width: 300px;
+        width: 300px;
+    }
+}
+
+@media (max-width: 576px) {
+    .x_content .form-inline input[name="search"] {
+        min-width: 250px;
+        width: 250px;
+    }
+}
+
+/* Responsive adjustments for products table */
+@media (max-width: 768px) {
+    .products-page .table th:nth-child(2),
+    .products-page .table td:nth-child(2) {
+        min-width: 120px;
+    }
+    
+    .products-page .table th:nth-child(6),
+    .products-page .table td:nth-child(6) {
+        min-width: 160px;
+    }
+}
+
 /* --- Bootstrap Layout Theme Styles --- */
 
 body {

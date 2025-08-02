@@ -57,7 +57,7 @@ if ($isSearch) {
 include '../includes/header.php'; 
 ?>
 
-<div class="row">
+<div class="row products-page">
     <div class="col-md-12">
         <div class="x_panel">
             <div class="x_title">
@@ -80,7 +80,7 @@ include '../includes/header.php';
                     <div class="col-md-6 offset-md-6">
                          <form action="products.php" method="get" class="form-inline float-right">
                             <div class="form-group mr-2 mb-2">
-                                <input type="text" name="search" class="form-control" placeholder="Search Cake Name/Category/Description..." title="Search across product names, categories, and descriptions" value="<?php echo htmlspecialchars($searchTerm); ?>">
+                                <input type="text" name="search" class="form-control" placeholder="ID, Cake Name, Category" title="Search across product IDs, names, categories, and descriptions" value="<?php echo htmlspecialchars($searchTerm); ?>">
                             </div>
                             <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-search"></i> Search</button>
                             <?php if ($isSearch): ?>

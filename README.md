@@ -32,14 +32,14 @@ This project was developed as part of an IB Computer Science Internal Assessment
 
     **Business Owner (Administrator):**
     *   Username: `rashni.devi`
-    *   Password: `admin123`
+    *   Password: ``********``
     
     **Staff Members:**
-    *   Username: `amit.sharma` | Password: `staff123`
-    *   Username: `nisha.patel` | Password: `staff123`
-    *   Username: `kevin.wong` | Password: `staff123`
-    *   Username: `anita.gopal` | Password: `staff123`
-    *   Username: `yusuf.kader` | Password: `staff123`
+    *   Username: `amit.sharma` | Password: `********`
+    *   Username: `nisha.patel` | Password: ``********``
+    *   Username: `kevin.wong` | Password: ``********``
+    *   Username: `anita.gopal` | Password: ``********``
+    *   Username: `yusuf.kader` | Password: ``********``
 
 2.  **Dashboard:** Provides an overview of upcoming deliveries and counts.
 3.  **Sidebar Navigation:** Use the left sidebar to navigate between sections:
@@ -62,6 +62,12 @@ The database includes:
 *   **15 cake products** ranging from MUR 950 to MUR 1,500
 *   **Sample orders** demonstrating the system workflow
 *   **6 users** (1 admin + 5 staff) representing a realistic cake shop team
+
+## Security Features
+
+*   **Password Security:** All passwords are securely hashed using bcrypt encryption
+*   **Session Management:** Secure session handling with regeneration to prevent fixation attacks
+*   **SQL Injection Protection:** All database queries use prepared statements
 
 ## Troubleshooting
 

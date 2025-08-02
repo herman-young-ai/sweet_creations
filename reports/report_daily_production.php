@@ -40,6 +40,9 @@ include '../includes/header.php';
                 <h2>Daily Production List</h2>
                  <ul class="nav navbar-right panel_toolbox">
                     <li><a href="reports.php" class="btn btn-secondary btn-sm"><i class="fa fa-arrow-left"></i> Back to Reports</a></li>
+                    <?php if (isset($_GET['report_date']) && !$errorMessage && !empty($orders)): ?>
+                    <li><button onclick="printReport()" class="btn btn-info btn-sm"><i class="fa fa-print"></i> Print Report</button></li>
+                    <?php endif; ?>
                  </ul>
                 <div class="clearfix"></div>
             </div>
@@ -113,6 +116,89 @@ include '../includes/header.php';
         </div> <!-- /x_panel -->
     </div> <!-- /col-md-12 -->
 </div> <!-- /row -->
+
+<?php if (isset($_GET['report_date']) && !$errorMessage && !empty($orders)): ?>
+<script>
+function printReport() {
+    // Create a new window for printing
+    var printWindow = window.open('', '_blank');
+    
+    // Build the print content
+    var printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Daily Production List - <?php echo formatDate($reportDate, 'l, F j, Y'); ?></title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+                .order-card { border: 1px solid #ddd; margin-bottom: 15px; padding: 15px; }
+                .order-header { font-weight: bold; background-color: #f8f9fa; padding: 10px; margin: -15px -15px 10px -15px; }
+                .items-list { margin: 10px 0; }
+                .item { padding: 5px 0; border-bottom: 1px dotted #ccc; }
+                .special-req { background-color: #fff3cd; padding: 10px; margin-top: 10px; border-left: 4px solid #ffc107; }
+                @media print { 
+                    body { margin: 0; } 
+                    .no-print { display: none; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>Sweet Creations - Daily Production List</h1>
+                <h2><?php echo formatDate($reportDate, 'l, F j, Y'); ?></h2>
+                <p>Generated on: <?php echo date('F j, Y g:i A'); ?></p>
+            </div>
+            
+            <?php foreach ($orders as $order): ?>
+            <div class="order-card">
+                <div class="order-header">
+                    Order #<?php echo $order['order_id']; ?> - 
+                    <?php echo htmlspecialchars($order['customer_name']); ?> 
+                    (<?php echo htmlspecialchars($order['customer_phone']); ?>) -
+                    Time: <?php echo !empty($order['delivery_time']) ? date("g:i A", strtotime($order['delivery_time'])) : 'Any'; ?> -
+                    Status: <?php echo htmlspecialchars($order['order_status']); ?>
+                </div>
+                
+                <div class="items-list">
+                    <strong>Items to Prepare:</strong>
+                    <?php if (empty($order['items'])): ?>
+                        <p>No items listed for this order.</p>
+                    <?php else: ?>
+                        <?php foreach ($order['items'] as $item): ?>
+                        <div class="item">
+                            <strong><?php echo $item['quantity']; ?> x <?php echo htmlspecialchars($item['cake_name']); ?></strong>
+                            <?php if (!empty($item['size'])): ?>
+                                (Size: <?php echo htmlspecialchars($item['size']); ?>)
+                            <?php endif; ?>
+                            <?php if (!empty($item['customization'])): ?>
+                                <br><em>Notes: <?php echo htmlspecialchars($item['customization']); ?></em>
+                            <?php endif; ?>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+                
+                <?php if (!empty($order['special_requirements'])): ?>
+                <div class="special-req">
+                    <strong>Special Requirements:</strong><br>
+                    <?php echo nl2br(htmlspecialchars($order['special_requirements'])); ?>
+                </div>
+                <?php endif; ?>
+            </div>
+            <?php endforeach; ?>
+            
+        </body>
+        </html>
+    `;
+    
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+}
+</script>
+<?php endif; ?>
 
 <?php 
 // Include footer
